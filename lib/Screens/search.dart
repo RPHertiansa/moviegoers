@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import './list.dart';
+import 'package:moviegoers/Screens/list.dart';
+// import './detail.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
 
-  static const String _title = 'Moviegoers App';
+  static const String _title = 'Movie Goers App';
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,8 @@ class _SearchBarState extends State<SearchBar> {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MovieList(title: _controller.text);
+                  // return MovieDetail(imdbID: _controller.text);
+                  return MovieList(movieTitle: _controller.text);
                 }));
               },
               child: Text('Search'),
