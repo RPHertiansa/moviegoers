@@ -10,7 +10,7 @@ class Opening extends StatelessWidget {
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("../../images/bg.jpg"),
+              image: AssetImage("images/bg.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -39,7 +39,12 @@ class Opening extends StatelessWidget {
                     SizedBox(
                       height: 75,
                     ),
-                    Text('Unlimited movies, TV shows and more.',
+                    Text('Unlimited movies, TV',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    Text('shows and more.',
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
