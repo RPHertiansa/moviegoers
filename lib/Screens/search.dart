@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviegoers/Screens/list.dart';
-// import './detail.dart';
+import 'package:moviegoers/Screens/opening.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -31,6 +31,14 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Opening();
+              }));
+            }),
         title: Text('Movie Goers App'),
       ),
       body: Padding(
@@ -47,7 +55,6 @@ class _SearchBarState extends State<SearchBar> {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  // return MovieDetail(imdbID: _controller.text);
                   return MovieList(movieTitle: _controller.text);
                 }));
               },

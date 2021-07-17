@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:moviegoers/Screens/detail.dart';
-import '../models/movieList.dart';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:moviegoers/Providers/movie.dart';
+import 'package:moviegoers/Widgets/loading.dart';
+import 'package:moviegoers/Widgets/error.dart';
 
 class MovieList extends StatelessWidget {
   final String movieTitle;
 
   MovieList({required this.movieTitle});
-  Future<MovieListData> getMoviesList(movieTitle) async {
-    final response = await http.get(
-        Uri.parse('http://www.omdbapi.com/?apikey=1b60a4ef&s=$movieTitle'));
 
-    if (response.statusCode == 200) {
-      return MovieListData.fromJson(json.decode(response.body)["Search"]);
-    } else {
-      throw Exception('Failed');
-    }
-  }
-
-  Future<List<dynamic>> _fecthDataUsers(movieTitle) async {
-    var result = await http.get(
-        Uri.parse("http://www.omdbapi.com/?apikey=1b60a4ef&s=$movieTitle'"));
-    return json.decode(result.body)['Search'];
-  }
+  var movieProvider = MovieProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +19,11 @@ class MovieList extends StatelessWidget {
       ),
       body: Container(
         child: FutureBuilder<List<dynamic>>(
-          future: _fecthDataUsers(movieTitle),
+          future: movieProvider.getMovieList(movieTitle),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
+                  scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.all(10),
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -49,85 +35,34 @@ class MovieList extends StatelessWidget {
                                 imdbID: snapshot.data[index]['imdbID']);
                           }));
                         }, //function lambda
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                NetworkImage(snapshot.data[index]['Poster']),
+                        child: Card(
+                          child: Column(
+                            children: <Widget>[
+                              Image.network(
+                                snapshot.data[index]['Poster'],
+                                height: 500,
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    snapshot.data[index]['Title'],
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(snapshot.data[index]['Year'])
+                                ],
+                              )
+                            ],
                           ),
-                          title: Text(snapshot.data[index]['Title'] +
-                              " " +
-                              snapshot.data[index]['Year']),
-                          subtitle: Text(snapshot.data[index]['imdbID']),
                         ));
                   });
-            } else {
-              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Error(errorMessage: "${snapshot.error}");
             }
+            return Loading();
           },
         ),
-      ),
-    );
-  }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ListView.builder(
-  //     itemBuilder: (context, index) {
-  //       //looping data dari model
-  //       final TourismPlace place = tourismPlaceList[index];
-  //       // final MovieListData movieListData
-  //       return InkWell(
-  //         onTap: () {
-  //           Navigator.push(context, MaterialPageRoute(builder: (context) {
-  //             return MovieDetail(imdbID: place);
-  //           }));
-  //         }, //function lambda
-  //         child: Card(
-  //           child: Row(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: <Widget>[
-  //               Expanded(
-  //                 flex: 1,
-  //                 child: Image.asset(place.imageAsset),
-  //               ),
-  //               Expanded(
-  //                   flex: 2,
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.all(8.0),
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: <Widget>[
-  //                         Text(
-  //                           place.name,
-  //                           style: TextStyle(fontSize: 16),
-  //                         ),
-  //                         SizedBox(
-  //                           height: 10,
-  //                         ),
-  //                         Text(place.location)
-  //                       ],
-  //                     ),
-  //                   )),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //     itemCount: tourismPlaceList.length,
-  //   );
-  // }
-}
-
-class MovieListGrid extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: GridView.count(
-        crossAxisCount: 4,
-        children: [],
       ),
     );
   }

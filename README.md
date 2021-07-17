@@ -1,4 +1,4 @@
-# moviegoers
+# Moviegoers
 
 A new Flutter project.
 

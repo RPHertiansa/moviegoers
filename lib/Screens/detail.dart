@@ -1,25 +1,15 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../models/movieDetail.dart';
+import 'package:moviegoers/Providers/movie.dart';
+import 'package:moviegoers/Widgets/error.dart';
+import 'package:moviegoers/Widgets/loading.dart';
+import 'package:moviegoers/models/movieDetail.dart';
 
 class MovieDetail extends StatelessWidget {
   final String imdbID;
 
   MovieDetail({required this.imdbID});
 
-  Future<MovieDetailData> getMovieDetail(imdbID) async {
-    final response = await http
-        .get(Uri.parse('http://www.omdbapi.com/?apikey=1b60a4ef&i=$imdbID'));
-
-    if (response.statusCode == 200) {
-      return MovieDetailData.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load movie data');
-    }
-  }
+  var movieProvider = MovieProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +19,46 @@ class MovieDetail extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder<MovieDetailData>(
-          future: getMovieDetail(imdbID),
+          future: movieProvider.getMovieDetail(imdbID),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data!.title);
+              return Card(
+                  child: SafeArea(
+                      child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Image.network(
+                      snapshot.data!.poster,
+                      height: 500,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          snapshot.data!.title,
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(snapshot.data!.plot),
+                        Text(snapshot.data!.writer),
+                        Text(snapshot.data!.actors),
+                        Text(snapshot.data!.genre),
+                        Text(snapshot.data!.rated),
+                        Text("${snapshot.data!.imdbRating}/10"),
+                      ],
+                    ),
+                  ],
+                ),
+              )));
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Error(errorMessage: "${snapshot.error}");
             }
 
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
+            return Loading();
           },
         ),
       ),
