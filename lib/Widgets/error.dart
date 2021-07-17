@@ -19,7 +19,7 @@ class Error extends StatelessWidget {
       SizedBox(
         height: 10,
       ),
-      Text("$errorMessage")
+      Text(errorMessage)
     ]));
   }
 }

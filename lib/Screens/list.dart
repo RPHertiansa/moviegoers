@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moviegoers/Screens/detail.dart';
 import 'package:moviegoers/Providers/movie.dart';
+import 'package:moviegoers/Widgets/appheader.dart';
 import 'package:moviegoers/Widgets/loading.dart';
 import 'package:moviegoers/Widgets/error.dart';
 
@@ -14,9 +15,7 @@ class MovieList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(movieTitle),
-      ),
+      appBar: AppHeader(title: 'Results for "$movieTitle"'),
       body: Container(
         child: FutureBuilder<List<dynamic>>(
           future: movieProvider.getMovieList(movieTitle),
@@ -36,26 +35,28 @@ class MovieList extends StatelessWidget {
                           }));
                         }, //function lambda
                         child: Card(
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                snapshot.data[index]['Poster'],
-                                height: 500,
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    snapshot.data[index]['Title'],
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(snapshot.data[index]['Year'])
-                                ],
-                              )
-                            ],
-                          ),
-                        ));
+                            color: Color(0xffF2DB83),
+                            child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  children: <Widget>[
+                                    Image.network(
+                                      snapshot.data[index]['Poster'],
+                                      height: 500,
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          snapshot.data[index]['Title'],
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(snapshot.data[index]['Year'])
+                                      ],
+                                    )
+                                  ],
+                                ))));
                   });
             } else if (snapshot.hasError) {
               return Error(errorMessage: "${snapshot.error}");
