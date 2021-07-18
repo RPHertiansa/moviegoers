@@ -21,7 +21,7 @@ class Opening extends StatelessWidget {
                     child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 75,
+                      height: 70,
                     ),
                     Text('Welcome',
                         style: TextStyle(
@@ -37,7 +37,7 @@ class Opening extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: Color(0xffDBA506))),
                     SizedBox(
-                      height: 75,
+                      height: 70,
                     ),
                     Text('Unlimited movies, TV',
                         style: TextStyle(
@@ -52,7 +52,7 @@ class Opening extends StatelessWidget {
                     Text('Watch anywhere. Cancel any time.',
                         style: TextStyle(fontSize: 18, color: Colors.white)),
                     SizedBox(
-                      height: 100,
+                      height: 90,
                     ),
                     ElevatedButton(
                       style:

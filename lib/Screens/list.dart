@@ -40,11 +40,14 @@ class MovieList extends StatelessWidget {
                                 padding: EdgeInsets.all(10),
                                 child: Column(
                                   children: <Widget>[
-                                    Image.network(
+                                    Expanded(
+                                        child: Container(
+                                            child: Image.network(
                                       snapshot.data[index]['Poster'],
                                       height: 500,
-                                    ),
-                                    Column(
+                                    ))),
+                                    Container(
+                                        child: Column(
                                       children: <Widget>[
                                         Text(
                                           snapshot.data[index]['Title'],
@@ -54,7 +57,7 @@ class MovieList extends StatelessWidget {
                                         ),
                                         Text(snapshot.data[index]['Year'])
                                       ],
-                                    )
+                                    ))
                                   ],
                                 ))));
                   });
